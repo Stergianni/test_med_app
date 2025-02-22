@@ -1,61 +1,107 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./Login.css";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
+import './Login.css'; // Import the CSS file for styling
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({});
+  // Redirect if user is already logged in
+  useEffect(() => {
+    if (sessionStorage.getItem("auth-token")) {
+      navigate("/");
+    }
+  }, []);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const validate = () => {
-    let errors = {};
-    if (!formData.email.match(/^\S+@\S+\.\S+$/)) errors.email = "Enter a valid email";
-    if (formData.password.length < 6) errors.password = "Password must be at least 6 characters";
-    return errors;
-  };
-
-  const handleSubmit = (e) => {
+  // Function to handle login form submission
+  const login = async (e) => {
     e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      alert("Login successful!");
+
+    // Send a POST request to the login API
+    const res = await fetch(`${API_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+
+    // Parse the response JSON
+    const json = await res.json();
+    if (json.authtoken) {
+      sessionStorage.setItem('auth-token', json.authtoken);
+      sessionStorage.setItem('email', email);
+
+      navigate('/');
+      window.location.reload();
     } else {
-      setErrors(validationErrors);
+      if (json.errors) {
+        for (const error of json.errors) {
+          alert(error.msg);
+        }
+      } else {
+        alert(json.error);
+      }
     }
   };
 
   return (
-    <div className="container">
+    <div className="login-container">
       <div className="login-grid">
-        <h2>Login</h2>
-        <p>
-          New member? <Link to="/signup" style={{ color: "#2190FF" }}>Sign Up Here</Link>
-        </p>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Enter your email" />
-            {errors.email && <span className="error">{errors.email}</span>}
-          </div>
+        <div className="login-text">
+          <h2>Login</h2>
+        </div>
+        <div className="login-text">
+          New member?  
+          <span>
+            <Link to="/signup" style={{ color: '#2190FF' }}> Sign Up Here</Link>
+          </span>
+        </div>
+        <br />
+        <div className="login-form">
+          <form onSubmit={login}>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                type="email" 
+                name="email" 
+                id="email" 
+                className="form-control" 
+                placeholder="Enter your email" 
+                aria-describedby="helpId" 
+                required
+              />
+            </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} className="form-control" placeholder="Enter your password" />
-            {errors.password && <span className="error">{errors.password}</span>}
-          </div>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                name="password"
+                id="password"
+                className="form-control"
+                placeholder="Enter your password"
+                aria-describedby="helpId"
+                required
+              />
+            </div>
 
-          <div className="btn-group">
-            <button type="submit" className="btn btn-primary">Login</button>
-            <button type="reset" className="btn btn-danger" onClick={() => setFormData({ email: "", password: "" })}>Reset</button>
-          </div>
-        </form>
+            <div className="btn-group">
+              <button type="submit" className="btn btn-primary">
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
