@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# Medical Appointment Booking Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Overview
+This project is a **Medical Appointment Booking Website** designed to help users book, manage, and cancel doctor appointments efficiently. The website provides a user-friendly interface with features like authentication, doctor search, appointment scheduling, and reviews.
 
-## Available Scripts
+## Features
+- **User Authentication:** Sign-up, login, and logout functionality.
+- **Search for Doctors:** Users can browse and filter doctors by specialization.
+- **Doctor Profile & Details:** View doctor information, ratings, and availability.
+- **Appointment Booking & Management:** Book, cancel, or reschedule appointments.
+- **Reviews & Ratings:** Patients can leave feedback for doctors.
+- **Responsive Design:** Optimized for both desktop and mobile.
 
-In the project directory, you can run:
+## Tech Stack
+- **Frontend:** React.js, Tailwind CSS
+- **Backend:** Node.js, Express.js, PostgreSQL (or MongoDB)
+- **Authentication:** JWT / NextAuth.js
+- **State Management:** Redux / Context API
+- **Deployment:** Vercel (Frontend), Render/Fly.io (Backend)
 
-### `npm start`
+## Installation & Setup
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Stergianni/Coursera-Certificates.git
+   cd IBM-Front-End-Developer/Project - Front-End Development Capstone Project/grihf-frontend_capstone_starter_code
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the development server:
+   ```sh
+   npm start
+   ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Folder Structure
+```
+📦 grihf-frontend_capstone_starter_code
+ ┣ 📂 src
+ ┃ ┣ 📂 components  # Reusable UI components
+ ┃ ┣ 📂 pages       # Page components
+ ┃ ┣ 📂 assets      # Images, icons, etc.
+ ┃ ┗ 📜 App.js      # Main app entry
+ ┣ 📜 package.json  # Project dependencies
+ ┣ 📜 README.md     # Project documentation
+ ┗ 📜 .gitignore    # Ignored files in Git
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Contribution
+Feel free to contribute by submitting issues or pull requests. Follow best practices and maintain code consistency.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+This project is licensed under the MIT License.
