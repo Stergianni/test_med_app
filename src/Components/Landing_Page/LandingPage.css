@@ -184,3 +184,17 @@ li {
     100% {top: 0; left: 0; transform: scale(1);}
   }
   
+  .landing {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  h1 {
+    color: #3685fb;
+  }
+  
+  p {
+    font-size: 18px;
+    color: #333;
+  }
+  
