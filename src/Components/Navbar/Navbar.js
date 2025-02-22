@@ -5,8 +5,6 @@ import './Navbar.css';
 const Navbar = () => {
     const navigate = useNavigate();
     const authToken = sessionStorage.getItem("auth-token");
-    const userEmail = sessionStorage.getItem("email");
-    const username = userEmail ? userEmail.split('@')[0] : '';
 
     const handleLogout = () => {
         sessionStorage.clear();
@@ -23,10 +21,10 @@ const Navbar = () => {
             <ul className="nav__links">
                 <li className="link"><Link to="/">Home</Link></li>
                 <li className="link"><Link to="/appointments">Appointments</Link></li>
+                <li className="link"><Link to="/instant-consultation"><button className="btn1">Instant Consultation</button></Link></li>
 
                 {authToken ? (
                     <>
-                        <li className="link username">Hello, {username}!</li>
                         <li className="link">
                             <button className="btn1" onClick={handleLogout}>Logout</button>
                         </li>
