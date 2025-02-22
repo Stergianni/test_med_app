@@ -1,80 +1,87 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./Sign_Up.css";
+import React, { useState } from 'react';
+import './Sign_Up.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config';
 
 const Sign_Up = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    password: "",
-  });
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [showerr, setShowerr] = useState('');
+    const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({});
+    const register = async (e) => {
+        e.preventDefault();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+        const response = await fetch(`${API_URL}/api/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+            }),
+        });
 
-  const validate = () => {
-    let errors = {};
-    if (!formData.name) errors.name = "Name is required";
-    if (!formData.phone.match(/^\d{10}$/)) errors.phone = "Enter a valid 10-digit phone number";
-    if (!formData.email.match(/^\S+@\S+\.\S+$/)) errors.email = "Enter a valid email";
-    if (formData.password.length < 6) errors.password = "Password must be at least 6 characters";
-    return errors;
-  };
+        const json = await response.json();
+        if (json.authtoken) {
+            sessionStorage.setItem("auth-token", json.authtoken);
+            sessionStorage.setItem("name", name);
+            sessionStorage.setItem("phone", phone);
+            sessionStorage.setItem("email", email);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      alert("Sign-up successful!");
-    } else {
-      setErrors(validationErrors);
-    }
-  };
+            navigate("/");
+            window.location.reload();
+        } else {
+            if (json.errors) {
+                for (const error of json.errors) {
+                    setShowerr(error.msg);
+                }
+            } else {
+                setShowerr(json.error);
+            }
+        }
+    };
 
-  return (
-    <div className="container">
-      <div className="signup-grid">
-        <h1>Sign Up</h1>
-        <p>
-          Already a member? <Link to="/login" style={{ color: "#2190FF" }}>Login</Link>
-        </p>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Name</label>
-            <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" placeholder="Enter your name" />
-            {errors.name && <span className="error">{errors.name}</span>}
-          </div>
+    return (
+        <div className="container" style={{ marginTop: '5%' }}>
+            <div className="signup-grid">
+                <div className="signup-form">
+                    <form method="POST" onSubmit={register}>
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input value={name} type="text" onChange={(e) => setName(e.target.value)} name="name" id="name" className="form-control" placeholder="Enter your name" aria-describedby="helpId" required />
+                        </div>
 
-          <div className="form-group">
-            <label>Phone</label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="form-control" placeholder="Enter your phone number" />
-            {errors.phone && <span className="error">{errors.phone}</span>}
-          </div>
+                        <div className="form-group">
+                            <label htmlFor="phone">Phone</label>
+                            <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" name="phone" id="phone" className="form-control" placeholder="Enter your phone number" aria-describedby="helpId" required />
+                        </div>
 
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" placeholder="Enter your email" />
-            {errors.email && <span className="error">{errors.email}</span>}
-          </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="email" id="email" className="form-control" placeholder="Enter your email" aria-describedby="helpId" required />
+                            {showerr && <div className="err" style={{ color: 'red' }}>{showerr}</div>}
+                        </div>
 
-          <div className="form-group">
-            <label>Password</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} className="form-control" placeholder="Enter your password" />
-            {errors.password && <span className="error">{errors.password}</span>}
-          </div>
+                        <div className="form-group">
+                            <label htmlFor="password">Password</label>
+                            <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" name="password" id="password" className="form-control" placeholder="Enter your password" aria-describedby="helpId" required />
+                        </div>
 
-          <div className="btn-group">
-            <button type="submit" className="btn btn-primary">Submit</button>
-            <button type="reset" className="btn btn-danger" onClick={() => setFormData({ name: "", phone: "", email: "", password: "" })}>Reset</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
+                        <div className="btn-group">
+                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <button type="reset" className="btn btn-danger">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export default Sign_Up;
