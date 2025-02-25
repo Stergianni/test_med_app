@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { API_URL } from '../../config';
-import './Login.css'; // Import the CSS file for styling
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../../config";
+import "./Login.css";
 
-const Login = () => {
+export default function Login() {
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState('');
+  const [showPassword, setShowPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [showerr, setShowerr] = useState("");
+
+  const validateEmail = function (email) {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  };
+  const togglePasswordVisibility = function () {
+    setShowPassword(!showPassword);
+  };
+
   const navigate = useNavigate();
 
-  // Redirect if user is already logged in
   useEffect(() => {
     if (sessionStorage.getItem("auth-token")) {
       navigate("/");
     }
+    // eslint-disable-next-line
   }, []);
 
-  // Function to handle login form submission
-  const login = async (e) => {
-    e.preventDefault();
-
-    // Send a POST request to the login API
+  const login = async () => {
     const res = await fetch(`${API_URL}/api/auth/login`, {
       method: "POST",
       headers: {
@@ -31,23 +38,31 @@ const Login = () => {
       }),
     });
 
-    // Parse the response JSON
     const json = await res.json();
     if (json.authtoken) {
-      sessionStorage.setItem('auth-token', json.authtoken);
-      sessionStorage.setItem('email', email);
+      sessionStorage.setItem("auth-token", json.authtoken);
 
-      navigate('/');
+      sessionStorage.setItem("email", email);
+      navigate("/");
       window.location.reload();
     } else {
       if (json.errors) {
         for (const error of json.errors) {
-          alert(error.msg);
+          setShowerr(error.msg);
         }
       } else {
-        alert(json.error);
+        setShowerr(json.error);
       }
     }
+  };
+
+  const submitHandler = function (e) {
+    e.preventDefault();
+    if (!validateEmail(email)) {
+      setShowerr("Please Enter a Valid Email");
+      return;
+    }
+    login();
   };
 
   return (
@@ -56,55 +71,75 @@ const Login = () => {
         <div className="login-text">
           <h2>Login</h2>
         </div>
-        <div className="login-text">
-          New member?  
+        <div className="login-text1">
+          Are you a new member?{" "}
           <span>
-            <Link to="/signup" style={{ color: '#2190FF' }}> Sign Up Here</Link>
+            <Link to="/signup" style={{ color: "#2190ff" }}>
+              Sign Up Here
+            </Link>
           </span>
         </div>
         <br />
         <div className="login-form">
-          <form onSubmit={login}>
-            <div className="form-group">
+          <form onSubmit={submitHandler}>
+            <div className="login-form-group">
               <label htmlFor="email">Email</label>
-              <input 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                type="email" 
-                name="email" 
-                id="email" 
-                className="form-control" 
-                placeholder="Enter your email" 
-                aria-describedby="helpId" 
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
               <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                name="password"
-                id="password"
-                className="form-control"
-                placeholder="Enter your password"
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                name="email"
+                id="email"
+                className="login-form-control"
+                placeholder="Enter your email"
                 aria-describedby="helpId"
                 required
               />
+              {showerr && <div className="err">{showerr}</div>}
+            </div>
+            <div className="login-form-group">
+              <label htmlFor="password">Password</label>
+              <div className="password-input-wrapper">
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  minLength="8"
+                  required
+                  className="login-form-control"
+                  placeholder="Enter your password"
+                  aria-describedby="helpId"
+                />
+                <span
+                  className="password-icon"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <i className="fa fa-eye"></i>
+                  ) : (
+                    <i className="fa fa-eye-slash"></i>
+                  )}
+                </span>
+              </div>
             </div>
 
-            <div className="btn-group">
-              <button type="submit" className="btn btn-primary">
+            <div className="btn-subgroup">
+              <button type="submit" className="btn btn-primary mb-2 mr-1 waves-effect waves-light">
                 Login
               </button>
             </div>
+            
+            <div className="btn-subgroup">
+              <button type="reset" className="btn btn-danger mb-2 waves-effect waves-light">
+                Reset
+              </button>
+            </div>
+            <br />
+            <div className="login-text">Forgot Password?</div>
           </form>
         </div>
       </div>
     </div>
   );
-};
-
-export default Login;
+}
