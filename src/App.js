@@ -8,8 +8,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from './Components/Navbar/Navbar';
 import Sign_Up from './Components/Sign_Up/Sign_Up';
 import Login from './Components/Login/Login';
-import InstantConsultation from './components/InstantConsultation/InstantConsultation';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import InstantConsultation from './Components/InstantConsultation';
+
 
 
 function App() {
