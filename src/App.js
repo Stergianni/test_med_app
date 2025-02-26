@@ -9,7 +9,7 @@ import InstantConsultation from './Components/InstantConsultation/InstantConsult
 import Home from './Components/Home/Home';  
 import Navbar from './Components/Navbar/Navbar';
 import Notification from './Components/Notification/Notification';
-
+import ReportsLayout from "./Components/ReportsLayout/ReportsLayout"
 
 
 function App() {
@@ -26,6 +26,7 @@ function App() {
                 <Route path="/InstantConsultation" element={<InstantConsultation/>} />
                 <Route path="/ReviewForm" element={<ReviewForm/>} />
                 <Route path="/ProfileCard" element={<ProfileCard/>}/>
+				<Route path="/ReportsLayout" element={<ReportsLayout/>}/>
                 </Routes>
            <Notification/>
           </BrowserRouter>
