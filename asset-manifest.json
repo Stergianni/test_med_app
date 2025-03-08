@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/test_med_app/static/css/main.3596b891.css",
+    "main.js": "/test_med_app/static/js/main.6e97ad54.js",
+    "static/js/453.eb6bde7f.chunk.js": "/test_med_app/static/js/453.eb6bde7f.chunk.js",
+    "index.html": "/test_med_app/index.html",
+    "main.3596b891.css.map": "/test_med_app/static/css/main.3596b891.css.map",
+    "main.6e97ad54.js.map": "/test_med_app/static/js/main.6e97ad54.js.map",
+    "453.eb6bde7f.chunk.js.map": "/test_med_app/static/js/453.eb6bde7f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3596b891.css",
+    "static/js/main.6e97ad54.js"
+  ]
+}
