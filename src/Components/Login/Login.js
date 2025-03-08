@@ -1,94 +1,83 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { API_URL } from "../../config";
+import React, { useState } from "react";
 import "./Login.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 const Login = () => {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
 
-  useEffect(() => {
-    if (sessionStorage.getItem("auth-token")) {
-      navigate("/");
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); // Initialize navigate
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
     }
-  }, []);
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    }
 
-  const login = async (e) => {
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if there are no errors
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+    if (validateForm()) {
+      // Simulating a successful login (replace this with actual API request in real world)
+      const fakeAuthToken = "fake-auth-token-12345"; // Simulate an auth token
 
-    const res = await fetch(`${API_URL}/api/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+      sessionStorage.setItem("auth-token", fakeAuthToken); // Store the auth token
+      sessionStorage.setItem("email", formData.email); // Store email (you can store more info if needed)
 
-    const json = await res.json();
+      // Optionally store user details (such as username)
+      sessionStorage.setItem("name", formData.email); // You can store any other user info
 
-    if (json.authtoken) {
-      sessionStorage.setItem("auth-token", json.authtoken);
-      sessionStorage.setItem("email", email);
-
-      navigate("/");
-      window.location.reload();
-    } else {
-      alert(json.errors ? json.errors[0].msg : json.error);
+      // Redirect to home page after login (or to any other page)
+      navigate("/"); // Using navigate to redirect instead of window.location.href
     }
   };
 
   return (
-    <div className="container">
-      <div className="login-grid">
-        <div className="login-text">
-          <h2>Login</h2>
+    <div className="login-container">
+      <form onSubmit={handleSubmit}>
+        <h2>Login</h2>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          {errors.email && <p className="error">{errors.email}</p>}
         </div>
-        <div className="login-text">
-          Are you a new member?{" "}
-          <span>
-            <Link to="/sign_up" style={{ color: "#2190FF" }}>
-              Sign Up Here
-            </Link>
-          </span>
+
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          {errors.password && <p className="error">{errors.password}</p>}
         </div>
-        <br />
-        <div className="login-form">
-          <form onSubmit={login}>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                name="email"
-                id="email"
-                className="form-control"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                name="password"
-                id="password"
-                className="form-control"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            <div className="btn-group">
-              <button type="submit" className="btn btn-primary">
-                Login
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
 };

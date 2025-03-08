@@ -1,19 +1,28 @@
-import {Table, Button} from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import "reactjs-popup/dist/index.css";
 import GiveReviews from './GiveReviews';
 import React, { useState } from 'react';
 
 export default function ReviewForm() {
-  const [reviews, setReviews] = useState("")
+  const [reviews, setReviews] = useState([
+    { id: 1, doctorName: "Dr. Michael Loe", speciality: "Cardiology", review: "", isReviewed: false },
+    { id: 2, doctorName: "Dr. Jason Lee", speciality: "Orthopedy", review: "", isReviewed: false },
+    { id: 3, doctorName: "Dr. Paula Boe", speciality: "Dermatology", review: "Great consultation", isReviewed: true },
+  ]);
 
-  const handleReview = function (review) {
-    setReviews(review);
-  }
-  console.log(reviews)
+  const handleReview = (doctorId, review) => {
+    setReviews((prevReviews) =>
+      prevReviews.map((reviewData) =>
+        reviewData.id === doctorId
+          ? { ...reviewData, review: review, isReviewed: true } // Mark as reviewed after submitting
+          : reviewData
+      )
+    );
+  };
 
   return (
-    <div style={{margin: "auto", maxWidth: "800px", marginTop: "10%"}}>
-      <h2 style={{marginBottom: "10px"}}>Reviews</h2>
+    <div style={{ margin: "auto", maxWidth: "800px", marginTop: "10%" }}>
+      <h2 style={{ marginBottom: "10px" }}>Reviews</h2>
       <Table responsive>
         <thead>
           <tr>
@@ -25,36 +34,23 @@ export default function ReviewForm() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dr. Michael Loe</td>
-            <td>Cardiology</td>
-            <td>
-              {<GiveReviews />}
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Dr. Jason Lee</td>
-            <td>Orthopedy</td>
-            <td>
-              {<GiveReviews />}
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Dr. Paula Boe</td>
-            <td>Dermatology</td>
-            <td>
-              {/* {<GiveReviews onHandleReview={handleReview} />} */}
-              <Button variant="primary" disabled size ='sm'>Review Submitted</Button>
+          {reviews.map((reviewData, index) => (
+            <tr key={reviewData.id}>
+              <td>{index + 1}</td>
+              <td>{reviewData.doctorName}</td>
+              <td>{reviewData.speciality}</td>
+              <td>
+                <GiveReviews
+                  doctorId={reviewData.id}
+                  onHandleReview={handleReview}
+                  isReviewed={reviewData.isReviewed} // Pass the reviewed status to the button
+                />
               </td>
-            <td>Great consultation</td>
-          </tr>
+              <td>{reviewData.review || "No review yet"}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>
-  )
+  );
 }

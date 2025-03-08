@@ -1,51 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Following code has been commented with appropriate comments for your reference. -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./Sign_Up.css"> <!-- Linking external CSS file -->
+    <title>Sign-Up Form</title>
+    <link rel="stylesheet" type="text/css" href="Sign_Up.css">
+
 </head>
 <body>
-    <div class="container" style="margin-top: 5%;"> <!-- Main container with margin-top -->
-        <div class="signup-grid"> <!-- Grid layout for sign-up form -->
-            <div class="signup-text"> <!-- Title for the sign-up form -->
-                <h1>Sign Up</h1>
-            </div>
-            <div class="signup-text1" style="text-align: left;"> <!-- Text for existing members to log in -->
-                Already a member? <span><a href="../Login/Login.html" style="color: #2190FF;"> Login</a></span>
-            </div>
-            <div class="signup-form"> <!-- Form for user sign-up -->
-                <form> <!-- Start of the form -->
+    <h2>Sign-Up Form</h2>
+    <form action="#" method="post">
+        <!-- Role Selection -->
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="">Select Role</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Patient">Patient</option>
+        </select>
+        <br><br>
 
-                    <div class="form-group"> <!-- Form group for user's name -->
-                        <label for="name">Name</label> <!-- Label for name input field -->
-                        <input type="text" name="name" id="name" required class="form-control" placeholder="Enter your name" aria-describedby="helpId" /> <!-- Text input field for name -->
-                    </div>
+        <!-- Name Field -->
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br><br>
 
-                    <div class="form-group"> <!-- Form group for user's phone number -->
-                        <label for="phone">Phone</label> <!-- Label for phone input field -->
-                        <input type="tel" name="phone" id="phone" required class="form-control" placeholder="Enter your phone number" aria-describedby="helpId" /> <!-- Tel input field for phone number -->
-                    </div>
+        <!-- Phone Number Field -->
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" placeholder="Enter 10-digit number">
+        <br><br>
 
-                    <div class="form-group"> <!-- Form group for user's email -->
-                        <label for="email">Email</label> <!-- Label for email input field -->
-                        <input type="email" name="email" id="email" required class="form-control" placeholder="Enter your email" aria-describedby="helpId" /> <!-- Email input field -->
-                    </div>
+        <!-- Email Field -->
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
 
-                    <div class="form-group"> <!-- Form group for user's password -->
-                        <label for="password">Password</label> <!-- Label for password input field -->
-                        <input name="password" id="password" required class="form-control" placeholder="Enter your password" aria-describedby="helpId" /> <!-- Password input field -->
-                    </div>
+        <!-- Password Field -->
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required minlength="6">
+        <br><br>
 
-                    <div class="btn-group"> <!-- Button group for form submission and reset -->
-                        <button type="submit" class="btn btn-primary mb-2 mr-1 waves-effect waves-light">Submit</button> <!-- Submit button -->
-                        <button type="reset" class="btn btn-danger mb-2 waves-effect waves-light">Reset</button> <!-- Reset button -->
-                    </div>
-                </form> <!-- End of the form -->
-            </div>
-        </div>
-    </div>
+        <!-- Submit and Reset Buttons -->
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </form>
 </body>
 </html>

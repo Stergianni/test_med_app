@@ -1,5 +1,7 @@
+/* App.css */
 .App {
   text-align: center;
+  padding-top: 70px; /* Add padding to push content down from the fixed navbar */
 }
 
 .App-logo {

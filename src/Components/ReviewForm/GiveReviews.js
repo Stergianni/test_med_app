@@ -4,14 +4,13 @@ import React, { useState } from 'react';
 import Star from './Star'; // Import star component
 import './GiveReviews.css';
 
-function GiveReviews() {
+function GiveReviews({ doctorId, onHandleReview, isReviewed }) {
   const [showForm, setShowForm] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [formData, setFormData] = useState({ name: '', review: '', rating: 0 });
 
   const handleButtonClick = () => {
     setShowForm(true);
-    console.log("ShowForm true");
   };
 
   const handleChange = (e) => {
@@ -22,15 +21,15 @@ function GiveReviews() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setFormData({ name: '', review: '', rating: 0 });
-
     if (formData.name && formData.review && formData.rating > 0) {
+      // Pass review data back to ReviewForm via onHandleReview
+      onHandleReview(doctorId, formData.review);
+      setFormData({ name: '', review: '', rating: 0 });
       setShowWarning(false);
+      setShowForm(false);
     } else {
       setShowWarning(true);
     }
-
-    setShowForm(false)
   };
 
   const handleStarClick = (starIndex) => {
@@ -53,7 +52,13 @@ function GiveReviews() {
 
   return (
     <div>
-      <Button variant="primary" /*disabled size='sm'*/ onClick={handleButtonClick}>Click Here</Button>
+      <Button
+        variant="primary"
+        onClick={handleButtonClick}
+        disabled={isReviewed} // Disable the button if the review is already submitted
+      >
+        {isReviewed ? 'Review Submitted' : 'Click Here'}
+      </Button>
 
       <Popup
         style={{ backgroundColor: "#FFFFFF" }}
@@ -62,25 +67,25 @@ function GiveReviews() {
         onClose={() => setShowForm(false)}
       >
         <section className="review-form">
-        <form onSubmit={handleSubmit}>
-          <h2>Give Your Review</h2>
-          {showWarning && <p className="warning">Please fill out all fields.</p>}
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="review">Review:</label>
-            <textarea id="review" name="review" value={formData.review} onChange={handleChange} />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-            <label>Rating:</label>
-            <div className="rating">
-              {renderStars()}
+          <form onSubmit={handleSubmit}>
+            <h2>Give Your Review</h2>
+            {showWarning && <p className="warning">Please fill out all fields.</p>}
+            <div style={{ marginBottom: "20px" }}>
+              <label htmlFor="name">Name:</label>
+              <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
             </div>
-          </div>         
-          <Button variant="primary" type="submit">Submit</Button>
-        </form>
+            <div style={{ marginBottom: "20px" }}>
+              <label htmlFor="review">Review:</label>
+              <textarea id="review" name="review" value={formData.review} onChange={handleChange} />
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <label>Rating:</label>
+              <div className="rating">
+                {renderStars()}
+              </div>
+            </div>
+            <Button variant="primary" type="submit">Submit</Button>
+          </form>
         </section>
       </Popup>
     </div>
